@@ -1,0 +1,338 @@
+# LifeManager PRD - Serverless Flutter Implementation
+
+## 1. Product Overview
+
+**LifeManager** is a personal productivity app designed to help users plan their day realistically, track time spent on activities, and gain insights into their productivity patterns. The app focuses on **realisticness** — ensuring users don't over-plan their day — and provides gentle accountability through end-of-day follow-ups.
+
+### Core Value Proposition
+- **Realistic Planning**: Prevents over-scheduling by showing available time vs. planned activities
+- **Effortless Tracking**: Quick-start timers and one-tap logging
+- **Gentle Accountability**: End-of-day check-ins with simple categorization
+- **Actionable Insights**: Data-driven feedback on productivity patterns
+
+### Target Users
+- Professionals seeking better time management
+- Entrepreneurs and freelancers managing multiple projects
+- Students balancing academic and personal commitments
+- Anyone struggling with realistic daily planning
+
+---
+
+## 2. Core Features
+
+### 2.1 Goals & Projects Management
+- **Goals**: High-level objectives (e.g., "Learn Spanish", "Launch Product")
+- **Projects**: Specific work items linked to goals (e.g., "Daily Spanish Practice", "Market Research")
+- **Attributes**: Title, planned hours per day, priority, recurrence, color coding
+- **Linking**: Projects can be associated with goals for better organization
+
+### 2.2 Fixed Commitments
+- **Sleep Schedule**: Configurable sleep and wake times
+- **Family Time**: Dedicated family/personal time blocks
+- **Other Commitments**: Customizable recurring commitments (commute, meals, exercise)
+- **Dynamic Management**: Add, edit, remove commitments as needed
+
+### 2.3 Daily Planner with Realisticness Check
+- **Visual Planning**: Drag-and-drop or input-based daily schedule
+- **Realisticness Meter**: Real-time indicator (Green/Amber/Red) showing schedule feasibility
+- **Available Time Calculation**: 24 hours minus sleep, family time, and other fixed commitments
+- **Overflow Detection**: Highlights when planned activities exceed available time
+- **Smart Suggestions**: Auto-scale, reschedule, or add buffer time recommendations
+
+### 2.4 Time Logging
+- **Quick-Start Timers**: One-tap start/stop for active projects
+- **Quick-Add Logs**: Retroactive logging with preset categories
+- **Categories**: Travel, Family, Eating, Work, Personal, etc.
+- **Minimal Friction**: Maximum 3 taps to log any activity
+- **Offline Support**: Local storage with background sync
+
+### 2.5 End-of-Day Follow-up
+- **Scheduled Check-ins**: Configurable time for daily review
+- **Simple Assessment**: Three-button interface (Done/Partly/Missed)
+- **Quick Categorization**: One-tap reasons for deviations (Travel, Family, Health, etc.)
+- **Optional Details**: Quick minute input for more context
+- **Gentle Persistence**: Configurable reminder frequency
+
+### 2.6 Insights & Analytics
+- **Daily Compliance**: Percentage of planned vs. actual time
+- **Deviation Index**: Weighted score considering unmet, untracked, and low-value activities
+- **Trend Analysis**: 7/30/90-day productivity patterns
+- **Top Causes**: Ranking of most common deviation reasons
+- **Visual Reports**: Charts and graphs for easy interpretation
+
+---
+
+## 3. User Experience Flows
+
+### 3.1 Onboarding Flow
+1. **Welcome & Value Prop**: Brief introduction to app benefits
+2. **Profile Setup**: Name, timezone, basic preferences
+3. **Fixed Commitments**: Configure sleep, family time, other recurring commitments
+4. **Initial Goals/Projects**: Create 1-3 initial goals and associated projects
+5. **Manager Tone**: Choose follow-up style (Gentle/Neutral/Strict)
+6. **First Plan**: Guided creation of first daily plan with realisticness check
+
+### 3.2 Daily Planning Flow
+1. **Morning Review**: Check today's plan, adjust if needed
+2. **Realisticness Check**: Real-time feedback on schedule feasibility
+3. **Quick Adjustments**: Auto-scale or reschedule suggestions
+4. **Plan Confirmation**: Finalize daily schedule
+
+### 3.3 Time Logging Flow
+1. **Quick Start**: Tap project to start timer
+2. **Background Tracking**: Timer runs in background
+3. **Quick Stop**: Tap to stop and categorize
+4. **Retroactive Add**: Quick-add for missed activities
+5. **Sync**: Automatic background synchronization
+
+### 3.4 End-of-Day Flow
+1. **Scheduled Prompt**: Modal appears at configured time
+2. **Quick Assessment**: Done/Partly/Missed buttons
+3. **Deviation Reasons**: One-tap categorization if needed
+4. **Optional Details**: Quick minute input
+5. **Tomorrow Preview**: Brief look at next day's plan
+
+### 3.5 Insights Flow
+1. **Daily Summary**: Quick compliance percentage and top activities
+2. **Weekly Report**: Trend analysis and pattern recognition
+3. **Monthly Review**: Longer-term productivity insights
+4. **Goal Progress**: Visual progress toward goals
+
+---
+
+## 4. Technical Architecture
+
+### 4.1 Tech Stack
+- **Frontend**: Flutter (iOS, Android, Web)
+- **Backend**: Firebase (Firestore, Cloud Functions, Authentication)
+- **State Management**: Riverpod
+- **Local Storage**: Hive or SharedPreferences
+- **Analytics**: Firebase Analytics + Crashlytics
+- **Payments**: RevenueCat (for subscription management)
+
+### 4.2 Firestore Data Model
+
+```
+users/{userId}
+├── profile: { name, timezone, manager_tone, created_at, is_paid }
+├── goals/{goalId}: { title, color, created_at }
+├── projects/{projectId}: { title, goal_id?, planned_hours_per_day, priority, color }
+├── fixed_commitments/{commitmentId}: { name, start_time, end_time, day_of_week, minutes }
+├── daily_plans/{yyyy-mm-dd}: { date, planned_minutes, available_minutes, projects: [{ project_id, planned_minutes }] }
+├── time_logs/{logId}: { start_ts, end_ts, minutes, category, project_id?, device_local_id, synced }
+├── follow_ups/{followUpId}: { date, status, reason?, additional_minutes?, created_at }
+├── insights/{yyyy-mm-dd}: { compliance_pct, deviation_index, top_categories, computed_at }
+└── ai_sessions/{sessionId}: { prompt, response, tokens_used, cost, created_at }
+```
+
+### 4.3 Cloud Functions
+- **onTimeLogCreate**: Trigger on time log creation/update to recompute daily aggregates
+- **scheduledFollowUpRunner**: Daily scheduled function to send follow-up notifications
+- **computeDailyInsights**: Nightly batch job to calculate insights and compliance metrics
+- **aiProxy**: Proxy for AI features with cost tracking and rate limiting
+
+### 4.4 Security & Privacy
+- **Authentication**: Firebase Auth (Email/Password, Google, Apple)
+- **Authorization**: Firestore security rules ensuring users can only access their own data
+- **Data Validation**: Server-side validation in Cloud Functions
+- **Privacy**: Minimal data collection, user-controlled data retention
+
+### 4.5 Offline Support
+- **Local-First**: Critical data stored locally with Hive
+- **Background Sync**: Automatic synchronization when online
+- **Conflict Resolution**: Last-write-wins with timestamp comparison
+- **Offline Indicators**: Clear UI feedback for sync status
+
+### 4.6 Performance Considerations
+- **Lazy Loading**: Load data on-demand to minimize initial load time
+- **Caching**: Aggressive caching of frequently accessed data
+- **Batch Operations**: Group Firestore operations to reduce costs
+- **Optimistic Updates**: Immediate UI updates with background sync
+
+---
+
+## 5. Paid Features & Monetization
+
+### 5.1 Free Tier
+- Basic planning and tracking
+- Manual insights (daily compliance)
+- Standard follow-up modal
+- Up to 5 goals and 10 projects
+
+### 5.2 Premium Tier ($4.99/month)
+- **AI-Powered Planning**: Auto-planify feature using GPT-4
+- **Smart Rescheduling**: AI suggestions for optimal schedule adjustments
+- **Advanced Insights**: Trend analysis, predictive analytics
+- **Unlimited Goals/Projects**: No limits on organization
+- **Export Features**: CSV export, data portability
+- **Priority Support**: Faster response times
+
+### 5.3 AI Features (Premium Only)
+- **Auto-Planify**: "I want to work on X for Y hours" → AI creates realistic daily schedule
+- **Conversational Planning**: Natural language input for schedule creation
+- **What-If Analysis**: Simulate different scenarios and their impact
+- **Smart Suggestions**: Context-aware recommendations for schedule optimization
+
+---
+
+## 6. Development Roadmap
+
+### Phase: Foundation (MVP core)
+
+- Auth & onboarding (including fixed commitments and manager tone preferences). 
+- Projects & Goals CRUD.
+- Planner screen with Realisticness check and suggested fixes.
+- Time logging (timer + quick-log) and end-of-day follow-up modal. 
+- Minimal Insights: daily compliance %, simple Deviation Index and top cause ranking. 
+- Firestore schema & Cloud Functions: `onTimeLogCreate`, nightly `computeDailyInsights`, `scheduledFollowUpRunner` stub.
+- Basic Firestore security rules.
+- Unit tests for core business logic (realisticness check, deviation calculation) and CI pipeline.
+- Acceptance criteria: user can onboard, plan, log time in <3 taps, and see accurate daily compliance.
+
+### Phase: Stabilize & polish
+
+- Improve UI polish and animations, offline sync refinements. Add local caching & batching to reduce reads/writes.
+- Implement subscription flow (IAP), server-side receipt validation, gating of AI features.
+- Add weekly summary email via Cloud Function (SES or SendGrid) and in-app weekly report.
+- Expand insights: 7/30/90-day trends; timeline visualizations.
+
+### Phase: Paid AI & advanced features
+
+- `aiProxy` Cloud Function with robust logging, prompt templates, and cost control.
+- Auto-planify and conversational brainstorm flow in-app. UI for editing AI-suggested plan.
+- Smart rescheduler & what-if analysis (simulate improved compliance).
+
+### Phase: Scaling & integrations
+
+- Calendar sync (read-only import) and optional app-usage inference (opt-in). 
+- Export to CSV & advanced analytics. BigQuery queries for product analytics. 
+- Add admin dashboard (hosted on Firebase Hosting) for subscription management and monitoring.
+
+---
+
+## 6. Logical Dependency Chain (build order rationale)
+
+1. **Authentication & user profile** (foundation for all user data).
+2. **Projects & Goals CRUD + Fixed Commitments** (planner inputs).
+3. **Planner UI with Realisticness check** (immediate user-facing value).
+4. **Time Logging + follow-up modal** (core data capture). 
+5. **Basic insights compute + UI** (value returned to user). 
+6. **Cloud Functions for scheduling & nightly recompute** (stability & server-side correctness). 
+7. **Subscription gating & AI proxy** (paid features). 
+8. **Polish, analytics, integrations, export**.
+
+Build each layer with tests and feature toggles so you can release incrementally.
+
+---
+
+## 7. Key formulas & deterministic logic (copy into code)
+
+### 7.1 Realisticness
+
+```
+available_minutes = 24*60 - (sleep_minutes + family_minutes + sum(other_fixed_minutes))
+planned_minutes = sum(project.daily_planned_minutes)
+overflow_minutes = max(0, planned_minutes - available_minutes)
+realisticness_score = available_minutes / planned_minutes  // <1 means overflow
+```
+
+### 7.2 Compliance per project (day)
+
+```
+compliance_pct = 100 * (actual_project_minutes / planned_project_minutes)  // if planned == 0 => N/A
+```
+
+### 7.3 Daily overall compliance
+
+```
+overall_compliance = 100 * (sum(actual_minutes_for_all_planned_projects) / sum(planned_minutes_for_all_projects))
+```
+
+### 7.4 Deviation Index (example tunable)
+
+```
+DI = 100 * (0.6 * unmet_fraction + 0.2 * untracked_fraction + 0.2 * low_value_fraction)
+where unmet_fraction = (planned_minutes - actual_planned_minutes) / planned_minutes
+```
+
+*Store weights in config for experimentation.*
+
+---
+
+## 8. Firestore rules (high-level)
+
+- Users can read/write only their own `users/{uid}/...` collections.
+- `aiSessions` write guarded by Cloud Function only (deny client writes) or check `users/{uid}.is_paid`.
+- Validate timestamps and maximum allowed duration for a single `timeLog` (e.g., max 24h).
+
+---
+
+## 9. QA / Acceptance checklist
+
+- Onboarding creates user with defaults. 
+- Planner real-time realisticness calculation matches deterministic logic (unit tests). 
+- Time logs created offline sync correctly and aggregates recompute server-side. 
+- Follow-up modal appears at the configured time in user's timezone. 
+- Paid gating prevents AI usage for non-subscribed users. 
+- Firestore rules block unauthorized access. 
+- Crashlytics and Analytics events fire on key actions.
+
+---
+
+## 10. Security, privacy & compliance
+
+- Default: minimal data collection. Any automatic app-usage or location features must be opt-in with clear rationale and toggles.
+- Data retention policy: allow user to export & delete full data. Provide admin process for GDPR/Right-to-be-forgotten requests.
+- Use server-side verification for payments and AI credits. No raw payment secrets stored in Firestore.
+
+---
+
+## 11. Cost & scaling notes (practical)
+
+- Firestore costs are read/write heavy; reduce reads by aggregating counts server-side and using local caching. 
+- Use batched writes and avoid hot documents — store daily plans per-day document instead of global counters. 
+- Monitor AI cost: route all calls through `aiProxy` Cloud Function with quotas and alerts to prevent runaway usage.
+
+---
+
+## 12. Appendix — sample schemas & pseudocode
+
+(1) `check_realisticness(userProfile, dailyPlan)` pseudocode — copy into backend/client logic.
+
+```
+def check_realisticness(sleep_minutes, family_minutes, other_fixed_minutes, project_planned_minutes_list):
+    available = 24*60 - (sleep_minutes + family_minutes + sum(other_fixed_minutes))
+    planned = sum(project_planned_minutes_list)
+    overflow = max(0, planned - available)
+    return { 'available': available, 'planned': planned, 'overflow': overflow, 'scale_factor': (available/planned) if planned>0 else 1 }
+```
+
+(2) Follow-up escalation rules (example JSON) — implement as Cloud Function config:
+
+```
+{
+  "modes": {
+    "gentle": {"snoozes":3},
+    "neutral": {"snoozes":2},
+    "strict": {"snoozes":1, "escalate_after_misses":2}
+  },
+  "escalation": {
+    "on_miss_threshold": 2,
+    "action": "insert_micro_task_or_reduce_next_day_plan"
+  }
+}
+```
+
+(3) Firestore indexing note: add composite index for `users/{uid}/timeLogs` by `start_ts` and `project_id`.
+
+---
+
+## 13. Next deliverables (suggested)
+
+- High-fidelity UI screens for onboarding, planner, quick-log, follow-up modal and insights (Flutter-ready). 
+- Cloud Function implementations: `onTimeLogCreate`, `scheduledFollowUpRunner`, `computeDailyInsights`, `aiProxy` stub.
+- Unit tests for all core formulas and integration tests for time log sync.
+
+---
+
+*Document prepared to follow the user's instruction to "strictly follow PRD" and to be production ready for a serverless Flutter Firebase implementation.*

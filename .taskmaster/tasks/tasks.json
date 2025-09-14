@@ -1,0 +1,441 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Project Setup & Repository Initialization",
+      "description": "Initialize Flutter project with proper structure, dependencies, and GitHub repository setup.",
+      "details": "Create a new Flutter project with the name 'flutter_life_manager'. Set up the basic project structure following Flutter best practices. Initialize Git repository and create initial commit. Set up GitHub repository and push initial code. Configure basic project settings and dependencies as outlined in the PRD.",
+      "testStrategy": "Verify project builds successfully on both iOS and Android. Ensure all initial dependencies are properly configured and the project structure follows Flutter conventions.",
+      "priority": "high",
+      "dependencies": [],
+      "status": "done",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create Flutter Project Structure",
+          "description": "Initialize a new Flutter project with the name 'flutter_life_manager' and set up the basic directory structure following Flutter best practices.",
+          "dependencies": [],
+          "details": "Run 'flutter create flutter_life_manager' and organize the lib/ directory with folders for models, services, providers, screens, widgets, and utils. Create a clean architecture that separates concerns and follows the project requirements.",
+          "status": "done",
+          "testStrategy": "Verify the project structure is created correctly and the app runs without errors on both iOS and Android simulators."
+        },
+        {
+          "id": 2,
+          "title": "Configure Dependencies",
+          "description": "Add all necessary dependencies to pubspec.yaml as specified in the PRD, including Firebase, Riverpod, and other required packages.",
+          "dependencies": [
+            "1.1"
+          ],
+          "details": "Add dependencies for Firebase (firebase_core, cloud_firestore, firebase_auth), Riverpod (flutter_riverpod), local storage (hive, hive_flutter), and other utilities. Ensure version compatibility and run 'flutter pub get' to install packages.",
+          "status": "done",
+          "testStrategy": "Verify all dependencies are properly installed and there are no version conflicts. Test that the app builds successfully after adding dependencies."
+        },
+        {
+          "id": 3,
+          "title": "Initialize Git Repository",
+          "description": "Set up Git version control for the project with proper .gitignore configuration.",
+          "dependencies": [
+            "1.2"
+          ],
+          "details": "Initialize Git repository with 'git init', create appropriate .gitignore file for Flutter projects, and make initial commit with the basic project structure.",
+          "status": "done",
+          "testStrategy": "Verify Git repository is properly initialized and .gitignore excludes appropriate files (build/, .dart_tool/, etc.)."
+        },
+        {
+          "id": 4,
+          "title": "Create GitHub Repository",
+          "description": "Create a GitHub repository and push the initial Flutter project code.",
+          "dependencies": [
+            "1.3"
+          ],
+          "details": "Create a new repository on GitHub named 'flutter-life-manager', add it as remote origin, and push the initial code. Set up repository description and basic README.",
+          "status": "done",
+          "testStrategy": "Verify the repository is created on GitHub and the initial code is successfully pushed and visible."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Firebase Integration & Authentication Setup",
+      "description": "Configure Firebase project and implement authentication system with email/password and social login options.",
+      "details": "Set up Firebase project for the LifeManager app. Configure Firestore database, Authentication, and other necessary Firebase services. Implement authentication flows for email/password, Google Sign-In, and Apple Sign-In (iOS). Create user profile management and ensure proper security rules are in place.",
+      "testStrategy": "Test authentication flows on both platforms. Verify user data is properly stored in Firestore and security rules prevent unauthorized access.",
+      "priority": "high",
+      "dependencies": [
+        1
+      ],
+      "status": "done",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Firebase Project Configuration",
+          "description": "Create Firebase project and configure it for the Flutter app with proper platform setup for iOS and Android.",
+          "dependencies": [],
+          "details": "Create a new Firebase project in the Firebase Console. Add iOS and Android apps to the project. Download and configure google-services.json (Android) and GoogleService-Info.plist (iOS). Set up Firebase CLI and initialize the project locally.",
+          "status": "done",
+          "testStrategy": "Verify Firebase is properly connected by testing basic Firebase initialization in the Flutter app."
+        },
+        {
+          "id": 2,
+          "title": "Firestore Database Setup",
+          "description": "Configure Firestore database with initial collections structure and security rules.",
+          "dependencies": [
+            "2.1"
+          ],
+          "details": "Set up Firestore database in the Firebase project. Create initial collection structure based on the PRD data model (users, goals, projects, etc.). Implement basic security rules to ensure users can only access their own data.",
+          "status": "done",
+          "testStrategy": "Test Firestore connectivity and verify security rules work correctly by attempting unauthorized access."
+        },
+        {
+          "id": 3,
+          "title": "Authentication Service Implementation",
+          "description": "Implement Firebase Authentication service with email/password, Google, and Apple Sign-In support.",
+          "dependencies": [
+            "2.2"
+          ],
+          "details": "Create AuthService class to handle all authentication operations. Implement sign-up, sign-in, sign-out, and password reset functionality. Add Google Sign-In and Apple Sign-In (iOS only) integration. Handle authentication state changes and user session management.",
+          "status": "done",
+          "testStrategy": "Test all authentication methods on both platforms. Verify proper error handling and user feedback for authentication failures."
+        },
+        {
+          "id": 4,
+          "title": "User Profile Management",
+          "description": "Implement user profile creation, updates, and management with Firestore integration.",
+          "dependencies": [
+            "2.3"
+          ],
+          "details": "Create User model and UserService for managing user profiles. Implement profile creation during onboarding, profile updates, and data synchronization with Firestore. Include fields for name, timezone, manager_tone, and other profile settings as per PRD.",
+          "status": "done",
+          "testStrategy": "Test user profile creation and updates. Verify data is properly stored in Firestore and synchronized across devices."
+        },
+        {
+          "id": 5,
+          "title": "Authentication UI Screens",
+          "description": "Create beautiful and user-friendly authentication UI screens including login, signup, and password reset.",
+          "dependencies": [
+            "2.4"
+          ],
+          "details": "Design and implement authentication screens with modern UI/UX. Include login screen, signup screen, password reset screen, and social login buttons. Ensure responsive design and proper error handling with user-friendly messages.",
+          "status": "done",
+          "testStrategy": "Test UI screens on different device sizes. Verify proper navigation flow and error message display."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Fixed Commitments Management",
+      "description": "Implement the Fixed Commitments feature allowing users to set up sleep schedule, family time, and other recurring commitments.",
+      "details": "Create UI and backend logic for managing fixed commitments as described in PRD 2.2. This includes sleep schedule configuration, family time blocks, and dynamic management of other commitments (commute, meals, exercise, etc.). The system should calculate available time for planning by subtracting these fixed commitments from the 24-hour day.",
+      "testStrategy": "Unit tests for time calculations. Widget tests for UI components. Integration tests for Firestore operations. Manual QA for user experience and data persistence.",
+      "priority": "high",
+      "dependencies": [
+        2
+      ],
+      "status": "done",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create FixedCommitments Data Model",
+          "description": "Define the data structure for fixed commitments including sleep schedule, family time, and other recurring commitments.",
+          "dependencies": [],
+          "details": "Create a FixedCommitments model using freezed and json_serializable. Include fields for sleep_start_time, sleep_end_time, family_minutes, and other_fixed_minutes (as a list of custom commitments with name and duration). Ensure proper serialization for Firestore storage.",
+          "status": "done",
+          "testStrategy": "Unit tests for model serialization/deserialization and validation of time calculations."
+        },
+        {
+          "id": 2,
+          "title": "Implement Firestore Service for Fixed Commitments",
+          "description": "Create service layer for CRUD operations on fixed commitments data in Firestore.",
+          "dependencies": [
+            "3.1"
+          ],
+          "details": "Extend FirestoreService or create FixedCommitmentsService to handle saving, loading, and updating fixed commitments. Implement methods for getting user's fixed commitments and calculating total committed time. Store data in users/{userId}/profile or users/{userId}/fixed_commitments collection.",
+          "status": "done",
+          "testStrategy": "Integration tests with Firestore emulator to verify CRUD operations work correctly and data is properly structured."
+        },
+        {
+          "id": 3,
+          "title": "Create Fixed Commitments UI Screen",
+          "description": "Design and implement the user interface for configuring fixed commitments including sleep schedule and family time.",
+          "dependencies": [
+            "3.2"
+          ],
+          "details": "Create FixedCommitmentsScreen with intuitive UI for setting sleep times (using time pickers), family time duration (slider or input), and managing other fixed commitments. Include visual feedback showing total committed time and remaining available time for planning.",
+          "status": "done",
+          "testStrategy": "Widget tests for UI components and user interactions. Manual QA for usability and visual design."
+        },
+        {
+          "id": 4,
+          "title": "Integrate with Riverpod State Management",
+          "description": "Create Riverpod providers for fixed commitments state management and integrate with the UI.",
+          "dependencies": [
+            "3.3"
+          ],
+          "details": "Create FixedCommitmentsProvider using Riverpod to manage the state of fixed commitments. Implement providers for loading, updating, and calculating available time. Ensure reactive UI updates when commitments change.",
+          "status": "done",
+          "testStrategy": "Unit tests for provider logic and state management. Integration tests for UI reactivity."
+        },
+        {
+          "id": 5,
+          "title": "Implement `other_fixed_minutes` Dynamic Management",
+          "description": "Enhance the `FixedCommitmentsScreen` to allow users to dynamically add, edit, and remove individual `other_fixed_minutes` entries. Each entry should have a label (e.g., 'Commute', 'Workout') and a duration in minutes. Ensure the UI updates correctly and the data model handles the list of custom commitments.",
+          "dependencies": [
+            "3.2",
+            "3.3"
+          ],
+          "details": "This involves implementing a `ListView.builder` or similar for `otherFixedMinutes` within `fixed_commitments_screen.dart`, with `TextFormField` for labels and a suitable input (e.g., `DropdownButton` or `Slider`) for durations, along with add/remove buttons. The `FixedCommitments` model (from 3.1) should be able to handle a list of custom time blocks.",
+          "status": "done",
+          "testStrategy": "Widget tests for adding, editing, and removing `other_fixed_minutes` entries, verifying UI updates and data integrity within the screen's state before saving."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Goals & Projects CRUD Implementation",
+      "description": "Enable users to create, read, update, and delete Goals and Projects, including linking Projects to Goals.",
+      "details": "Implement UI for Goals and Projects (PRD 2.1). Create Firestore collections `users/{userId}/goals/{goalId}` and `users/{userId}/projects/{projectId}`. Define data models using `freezed` and `json_serializable` for `Goal` and `Project` (title, planned_hours_per_day, priority, recurrence, goal_id?, color). Implement CRUD operations via `flutter_riverpod` (or `bloc`) and Firestore services. Integrate into the onboarding flow for initial goal/project creation (step 2 of PRD 3.1).",
+      "testStrategy": "Unit tests for data models and CRUD logic. Integration tests for Firestore interactions. Manual QA for UI flows and data integrity.",
+      "priority": "high",
+      "dependencies": [
+        2,
+        3
+      ],
+      "status": "done",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Define Goal & Project Data Models",
+          "description": "Create `lib/models/goal_model.dart` and `lib/models/project_model.dart` using `freezed` and `json_serializable`. These models will define the structure for Goal and Project data, including fields like `title`, `planned_hours_per_day`, `priority`, `recurrence`, `goal_id?` (for Project), `color`, and `id` (for Firestore document ID).",
+          "dependencies": [],
+          "details": "Follow the existing `user_model.dart` pattern for `freezed` and `json_serializable` implementation. Ensure `goal_id` in the `Project` model is nullable to support projects without an immediate goal link. Run `flutter pub run build_runner build --delete-conflicting-outputs` to generate `*.freezed.dart` and `*.g.dart` files.",
+          "status": "done",
+          "testStrategy": "Unit tests for `Goal` and `Project` models to verify `toJson` and `fromJson` serialization/deserialization correctness for all defined fields."
+        },
+        {
+          "id": 2,
+          "title": "Implement Firestore Services for Goals & Projects",
+          "description": "Create `lib/services/goal_service.dart` and `lib/services/project_service.dart`. These services will encapsulate all Firestore CRUD operations (create, read, update, delete) for Goals and Projects, interacting with the `users/{userId}/goals` and `users/{userId}/projects` collections.",
+          "dependencies": [
+            "4.1"
+          ],
+          "details": "Implement methods such as `addGoal(Goal goal)`, `getGoalsStream(String userId)`, `updateGoal(Goal goal)`, `deleteGoal(String goalId)` in `GoalService`. Implement similar methods for `ProjectService`. Ensure all operations correctly scope to the current authenticated user's ID. Utilize `FirebaseFirestore.instance` as seen in `auth_service.dart`.",
+          "status": "done",
+          "testStrategy": "Integration tests using a Firestore emulator or mock Firestore to verify the correctness of all CRUD operations (add, get, update, delete) for both Goals and Projects, ensuring data is stored and retrieved accurately under the correct user path."
+        },
+        {
+          "id": 3,
+          "title": "Create Riverpod Providers for Goals & Projects",
+          "description": "Develop `lib/providers/goal_provider.dart` and `lib/providers/project_provider.dart`. These providers will expose the Firestore services and provide streams of Goals and Projects to the UI using `StreamProvider` for lists and potentially `StateNotifierProvider` for managing form states.",
+          "dependencies": [
+            "4.2"
+          ],
+          "details": "Create `StreamProvider`s (e.g., `allGoalsProvider`, `allProjectsProvider`) that listen to changes in the Firestore collections via the respective services. Implement `StateNotifierProvider`s for managing the state of forms used for creating or editing individual goals/projects, allowing for reactive UI updates. Ensure providers correctly depend on `currentUserProvider` to get the current user's ID.",
+          "status": "done",
+          "testStrategy": "Unit tests for `goal_provider.dart` and `project_provider.dart` to ensure they correctly interact with the services, emit expected states/data streams, and handle loading/error states."
+        },
+        {
+          "id": 4,
+          "title": "Develop Goal Management UI",
+          "description": "Implement the UI screens and components for listing, viewing details, creating, updating, and deleting Goals. This includes forms for inputting goal details and displaying them in a user-friendly manner.",
+          "dependencies": [
+            "4.3"
+          ],
+          "details": "Create screens such as `GoalsScreen` (to list all goals), `GoalDetailScreen` (for individual goal view), and `GoalFormScreen` (for creation/editing). Utilize `ConsumerWidget` or `ConsumerStatefulWidget` to interact with the Riverpod goal providers. Ensure input validation and clear feedback for CRUD operations. Adhere to the project's 'beautiful, artistic UI' focus.",
+          "status": "done",
+          "testStrategy": "Widget tests for `GoalsScreen` and `GoalFormScreen` to verify UI rendering, form input handling, and interaction with providers. Manual QA to ensure the full CRUD flow for Goals is functional and visually appealing."
+        },
+        {
+          "id": 5,
+          "title": "Develop Project Management UI & Linking",
+          "description": "Implement the UI screens and components for listing, viewing details, creating, updating, and deleting Projects. Crucially, include functionality within the Project creation/edit form to select and link a Project to an existing Goal.",
+          "dependencies": [
+            "4.4"
+          ],
+          "details": "Create screens like `ProjectsScreen` (list all projects), `ProjectDetailScreen`, and `ProjectFormScreen`. The `ProjectFormScreen` must include a dropdown or similar selector that allows users to choose an existing `Goal` to link the project to, updating the `goal_id` field in the `Project` model. Ensure the UI clearly indicates linked goals.",
+          "status": "done",
+          "testStrategy": "Widget tests for `ProjectsScreen` and `ProjectFormScreen`, specifically focusing on the project-goal linking mechanism. Manual QA to verify project CRUD operations and the correct assignment and display of linked goals."
+        },
+        {
+          "id": 6,
+          "title": "Integrate Goal/Project Creation into Onboarding",
+          "description": "Modify the onboarding flow (specifically 'step 2 of PRD 3.1') to allow new users to create their initial Goal(s) and Project(s) as part of the setup process, guiding them through the initial setup.",
+          "dependencies": [
+            "4.5"
+          ],
+          "details": "Identify the relevant onboarding screen (e.g., `lib/ui/onboarding/onboarding_step_2_screen.dart` or similar). Integrate simplified versions of the `GoalFormScreen` and `ProjectFormScreen` into this step, or create dedicated onboarding forms. Ensure that the created Goals and Projects are correctly saved to Firestore upon completion of this onboarding step, providing a seamless initial user experience.",
+          "status": "done",
+          "testStrategy": "Integration tests for the onboarding flow to verify that initial goal and project creation functions correctly and persists data to Firestore. Manual QA to confirm the user experience during onboarding for goal/project setup."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Planner Screen & Realisticness Check (Frontend)",
+      "description": "Develop the Planner screen, displaying daily planned hours, and implement the real-time Realisticness Meter with suggestions.",
+      "details": "Create the Planner screen UI (PRD 2.3). Fetch `dailyPlans/{yyyy-mm-dd}` and user's `fixed_commitments`. Implement the `check_realisticness` pseudocode (PRD 7.1, 12.1) client-side to compute `available_minutes`, `planned_minutes`, `overflow_minutes`, and `realisticness_score`. Display the Realisticness Meter (Green/Amber/Red) and suggested fixes (Auto-scale, Reschedule, Buffer). Ensure real-time updates as planned hours change.",
+      "testStrategy": "Unit tests for the `check_realisticness` logic. Widget tests for the Planner UI and meter display. Integration tests to verify data fetching and real-time updates.",
+      "priority": "high",
+      "dependencies": [
+        4
+      ],
+      "status": "todo",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Define Planner Data Models (DailyPlan, FixedCommitment)",
+          "description": "Create the `DailyPlan` and `FixedCommitment` data models in `lib/models/`. The `DailyPlan` model should include fields like `date`, `planned_minutes`, `available_minutes`, `overflow_minutes`, and `realisticness_score`. The `FixedCommitment` model should include fields such as `id`, `name`, `start_time`, `end_time`, and `day_of_week`. Both models must implement `fromFirestore` factory constructors for parsing `DocumentSnapshot` and `toMap` methods for serialization, following existing model patterns (e.g., `user.dart`, `time_log.dart`).",
+          "dependencies": [],
+          "details": "Create `lib/models/daily_plan.dart` and `lib/models/fixed_commitment.dart`. Ensure all required fields from the task description are included. Use `Timestamp` for date/time fields where appropriate for Firestore compatibility. Implement robust error handling for `fromFirestore`.",
+          "status": "done",
+          "testStrategy": "Unit tests for `DailyPlan.fromFirestore`, `DailyPlan.toMap`, `FixedCommitment.fromFirestore`, and `FixedCommitment.toMap` to ensure correct data serialization and deserialization."
+        },
+        {
+          "id": 2,
+          "title": "Implement Planner Data Fetching in FirestoreService",
+          "description": "Extend `lib/services/firestore_service.dart` to include methods for fetching `DailyPlan` and `FixedCommitment` data. Add a method `streamDailyPlan(String userId, DateTime date)` that returns a `Stream<DailyPlan?>` for a specific day from `users/{userId}/dailyPlans/{yyyy-mm-dd}`. Add another method `streamFixedCommitments(String userId)` that returns a `Stream<List<FixedCommitment>>` from `users/{userId}/fixedCommitments`. These methods should leverage the `fromFirestore` constructors defined in Subtask 1 and follow the existing `FirestoreService` streaming patterns.",
+          "dependencies": [],
+          "details": "Ensure the date format for `dailyPlans` document IDs is `yyyy-mm-dd`. Handle cases where a `DailyPlan` document might not exist for a given day (returning `null` or an empty `DailyPlan` object). Implement error handling for Firestore operations.",
+          "status": "done",
+          "testStrategy": "Integration tests to verify `streamDailyPlan` and `streamFixedCommitments` correctly fetch and parse data from mock Firestore instances or a test project. Unit tests for any complex data transformation within the service methods."
+        },
+        {
+          "id": 3,
+          "title": "Develop Planner Screen UI and Basic Data Display",
+          "description": "Create `lib/screens/planner_screen.dart`. Implement the basic UI for the Planner screen, including a `Scaffold`, `AppBar` with a date selection mechanism (e.g., a calendar icon or navigation arrows for days). Use `StreamBuilder` or a dedicated `ChangeNotifierProvider` (e.g., `PlannerProvider`) to consume the `DailyPlan` stream from `FirestoreService`. Display the fetched `planned_minutes` and other relevant `DailyPlan` data on the screen. Integrate this new screen into the app's navigation (e.g., add a bottom navigation bar item or a route).",
+          "dependencies": [],
+          "details": "Focus on a clean, user-friendly layout as per PRD 2.3. The date selector should allow users to easily navigate between days. Ensure the UI gracefully handles loading states and when no `DailyPlan` data is available for a selected day. Use existing UI components and styling conventions.",
+          "status": "done",
+          "testStrategy": "Widget tests for `PlannerScreen` to verify correct UI rendering, date selection functionality, and display of `DailyPlan` data. Integration tests to confirm navigation to and from the `PlannerScreen`."
+        },
+        {
+          "id": 4,
+          "title": "Implement Client-side Realisticness Calculation Logic",
+          "description": "Create a new utility class or a `ChangeNotifierProvider` (e.g., `RealisticnessCalculator` or `PlannerProvider`) to house the `check_realisticness` logic. Implement the pseudocode from PRD 7.1 and 12.1 client-side. This logic should take `DailyPlan` data and `List<FixedCommitment>` as inputs and compute `available_minutes`, `planned_minutes`, `overflow_minutes`, and `realisticness_score`. The calculation should be pure and independent of UI, making it easily testable.",
+          "dependencies": [],
+          "details": "Define clear input and output parameters for the calculation function. Consider edge cases like no fixed commitments or no planned hours. The calculation should convert all time units to minutes for consistency. Ensure the logic is robust and adheres to the PRD specifications for score thresholds.",
+          "status": "in-progress",
+          "testStrategy": "Extensive unit tests for the `check_realisticness` logic with various scenarios: empty inputs, full schedule, overflow, different fixed commitments, and varying planned hours to ensure accurate computation of all output metrics and realisticness score."
+        },
+        {
+          "id": 5,
+          "title": "Integrate Realisticness Meter UI and Real-time Updates",
+          "description": "Integrate the `RealisticnessCalculator` (or `PlannerProvider`) into the `PlannerScreen`. Display the Realisticness Meter (Green/Amber/Red) based on the computed `realisticness_score`. Implement UI elements to show suggested fixes (Auto-scale, Reschedule, Buffer). Ensure that the Realisticness Meter and suggestions update in real-time whenever the `DailyPlan` data or `FixedCommitment` list changes (e.g., as planned hours are modified or commitments are added/removed), by reacting to the streams from `FirestoreService` and re-running the calculation.",
+          "dependencies": [],
+          "details": "Design a clear visual representation for the Realisticness Meter (e.g., a colored bar or icon). The suggestions should be displayed prominently when the score indicates an issue. Use `Provider.of<T>(context, listen: true)` or `Consumer` widgets to ensure real-time updates. Consider adding basic interactive elements for the suggestions (though full implementation of 'Auto-scale' etc. is out of scope for this task).",
+          "status": "pending",
+          "testStrategy": "Widget tests for the `PlannerScreen` to verify the Realisticness Meter's color and text change correctly based on different `realisticness_score` values. Integration tests to confirm that UI elements update in real-time when underlying data streams (DailyPlan, FixedCommitments) emit new values."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Time Logging (Timer & Quick-Add) UI",
+      "description": "Implement the user interface for quick-start/stop timers and quick-add logs with preset categories.",
+      "details": "Develop the UI for time logging (PRD 2.4). This includes a quick-start/stop timer for active projects and a quick-add feature for logging past activities with preset categories (e.g., Travel, Family, Eating). Ensure minimal clicks (PRD 3.5). Store logs locally first, including `device_local_id` (PRD 4.6). The `timeLogs` Firestore collection will be `users/{userId}/timeLogs/{logId}` with fields `start_ts`, `end_ts`, `minutes`, `category`, `project_id?`, `device_local_id`, `synced`.",
+      "testStrategy": "Widget tests for timer and quick-add UI. Integration tests for local data storage and retrieval. Manual QA for user experience and minimal-click principle.",
+      "priority": "high",
+      "dependencies": [
+        5
+      ],
+      "status": "todo",
+      "subtasks": []
+    },
+    {
+      "id": 7,
+      "title": "End-of-Day Follow-up Modal UI",
+      "description": "Create the interactive modal for end-of-day follow-ups, allowing users to quickly categorize their day's performance.",
+      "details": "Design and implement the 'Follow-up modal' UI (PRD 2.4, 3.3). This modal should appear at the end of the day (or configured cadence) and show planned vs. actual (high-level). Provide three large buttons: 'Done', 'Partly', 'Missed'. If 'Partly' or 'Missed' is selected, prompt for a 1-tap reason (Travel, Family, Friends, Outing, Distraction, Health, Other) and optional quick minute input. Store responses in `users/{userId}/followUps/{followUpId}`.",
+      "testStrategy": "Widget tests for the modal's appearance and interaction. Integration tests for data capture and storage. Manual QA for modal timing and user flow.",
+      "priority": "high",
+      "dependencies": [
+        6
+      ],
+      "status": "todo",
+      "subtasks": []
+    },
+    {
+      "id": 8,
+      "title": "Firestore Data Models & Core Security Rules",
+      "description": "Define and implement all core Firestore collections and establish initial security rules to protect user data.",
+      "details": "Finalize Firestore data models for `users`, `profilesettings`, `goals`, `projects`, `dailyPlans`, `timeLogs`, `followUps` as per PRD 4.2. Implement Firestore security rules (PRD 4.5, 8) to enforce `request.auth.uid == userId` for all user-scoped data. Validate basic data shapes and maximum allowed durations for `timeLog` entries within rules.",
+      "testStrategy": "Unit tests for Firestore rule logic using Firebase Emulator. Integration tests to verify data access patterns (read/write) with authenticated and unauthenticated users. Manual QA for data integrity.",
+      "priority": "high",
+      "dependencies": [
+        4,
+        6,
+        7
+      ],
+      "status": "todo",
+      "subtasks": []
+    },
+    {
+      "id": 9,
+      "title": "Cloud Function: `onTimeLogCreate`",
+      "description": "Develop a Cloud Function to incrementally update daily aggregated counters and recompute short insights upon time log creation/update.",
+      "details": "Implement the `onTimeLogCreate` Cloud Function (PRD 4.3) that triggers when a time log is created or updated in `users/{userId}/timeLogs/{logId}`. The function should update daily aggregated data in `users/{userId}/insights/{yyyy-mm-dd}` and recompute compliance percentages and basic metrics. Ensure the function is idempotent and handles edge cases like duplicate logs or invalid data.",
+      "testStrategy": "Unit tests for the Cloud Function logic. Integration tests with Firestore emulator to verify correct data aggregation. Load testing to ensure performance under high log creation rates.",
+      "priority": "medium",
+      "dependencies": [
+        8
+      ],
+      "status": "todo",
+      "subtasks": []
+    },
+    {
+      "id": 10,
+      "title": "Cloud Function: `scheduledFollowUpRunner`",
+      "description": "Create a scheduled Cloud Function to send daily follow-up notifications to users at their configured times.",
+      "details": "Implement the `scheduledFollowUpRunner` Cloud Function (PRD 4.3) that runs on a schedule (e.g., every hour) to check which users should receive follow-up notifications based on their timezone and configured follow-up time. Send push notifications or in-app notifications to prompt users to complete their end-of-day follow-up. Handle user preferences for notification frequency and snooze options.",
+      "testStrategy": "Unit tests for scheduling logic and timezone handling. Integration tests for notification delivery. Manual QA for notification timing and user experience.",
+      "priority": "medium",
+      "dependencies": [
+        7,
+        9
+      ],
+      "status": "todo",
+      "subtasks": []
+    },
+    {
+      "id": 11,
+      "title": "Cloud Function: `computeDailyInsights`",
+      "description": "Develop a nightly batch Cloud Function to calculate comprehensive daily insights, compliance metrics, and deviation indices.",
+      "details": "Implement the `computeDailyInsights` Cloud Function (PRD 4.3) that runs nightly to process all users' time logs and follow-up data from the previous day. Calculate daily compliance percentages, deviation indices, top deviation causes, and other insights as defined in PRD 7.2-7.4. Store results in `users/{userId}/insights/{yyyy-mm-dd}` for efficient retrieval by the mobile app.",
+      "testStrategy": "Unit tests for insight calculation algorithms. Integration tests with sample data to verify correct metric computation. Performance testing to ensure the function can handle all users within reasonable time limits.",
+      "priority": "medium",
+      "dependencies": [
+        9,
+        10
+      ],
+      "status": "todo",
+      "subtasks": []
+    },
+    {
+      "id": 12,
+      "title": "Basic Insights UI Implementation",
+      "description": "Create the user interface for displaying daily compliance, deviation index, and basic productivity insights.",
+      "details": "Implement the Insights screen UI (PRD 2.6) to display daily compliance percentages, deviation index, top deviation causes, and basic trend information. Create charts and visualizations for easy interpretation of productivity data. Ensure the UI is responsive and provides actionable insights to help users improve their planning and execution.",
+      "testStrategy": "Widget tests for insights display components. Integration tests for data fetching and chart rendering. Manual QA for visual design and user experience.",
+      "priority": "medium",
+      "dependencies": [
+        11
+      ],
+      "status": "todo",
+      "subtasks": []
+    },
+    {
+      "id": 13,
+      "title": "Unit Tests & CI Pipeline Setup",
+      "description": "Implement comprehensive unit tests for core business logic and set up continuous integration pipeline.",
+      "details": "Create unit tests for all core business logic including realisticness calculations, compliance metrics, deviation index computation, and data model serialization. Set up GitHub Actions or similar CI pipeline to run tests automatically on pull requests and main branch pushes. Ensure code coverage meets project standards and all critical paths are tested.",
+      "testStrategy": "Achieve >80% code coverage for core business logic. Verify CI pipeline runs successfully and catches regressions. Manual review of test quality and edge case coverage.",
+      "priority": "high",
+      "dependencies": [
+        5,
+        8,
+        12
+      ],
+      "status": "todo",
+      "subtasks": []
+    }
+  ]
+}
